@@ -23,4 +23,4 @@ async def sync(ctx: commands.Context):
     await ctx.send('Syncing...')
     await bot.tree.sync(guild= ctx.guild)
 
-bot.run(os.getenv('TOKEN'))
+bot.run(os.getenv('TOKEN')) #Need .env file with bot token
