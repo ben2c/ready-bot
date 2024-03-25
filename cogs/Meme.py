@@ -25,5 +25,11 @@ class Meme(commands.Cog):
       embed.set_image(url="https://media1.tenor.com/m/Kcd9s-ao_VkAAAAC/kekw.gif")
       await message.channel.send(embed=embed)
 
+    elif ("ben" or "Ben") in message.content:
+      await message.channel.send("Did someone say Ben!?")
+      embed = nextcord.Embed(title="")
+      embed.set_image(url="https://media1.tenor.com/m/82Rr2PPBCtIAAAAd/cat-jam-cat.gif")
+      await message.channel.send(embed=embed)
+
 def setup(client):
   client.add_cog(Meme(client))

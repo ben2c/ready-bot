@@ -7,4 +7,4 @@ def init():
   global playerArrString
   playerArrString = [[], []]
   global queueSize
-  queueSize = [[5], [5]]
+  queueSize = [5, 5]
