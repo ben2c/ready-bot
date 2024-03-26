@@ -35,10 +35,6 @@ if __name__ == '__main__':
     for extension in initial_extensions:
         client.load_extension(extension)
 
-@client.slash_command(name= "hello", description= "Hello World", guild_ids=[testServerId])
-async def hello(interaction: Interaction):
-    await interaction.response.send_message("Hello!")
-
 
 #Bot Start Up Token
 client.run(os.getenv('TOKEN')) #Need .env file with bot token

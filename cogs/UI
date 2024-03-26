@@ -1,3 +1,5 @@
+#To utilize this cog, add ".py" to the end of this file name
+
 import nextcord
 from nextcord.ext import commands
 from nextcord import Interaction

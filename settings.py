@@ -1,10 +1,10 @@
 def init():
 #Arrays
   global playerArr
-  playerArr = [[], []]
+  playerArr = [[], [], []]
   global gameNameArr
-  gameNameArr = ["League", "Valorant"]
+  gameNameArr = ["League", "Valorant", "ARAM"]
   global playerArrString
-  playerArrString = [[], []]
+  playerArrString = [[], [], []]
   global queueSize
-  queueSize = [5, 5]
+  queueSize = [5, 5, 5]

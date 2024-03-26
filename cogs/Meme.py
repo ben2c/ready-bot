@@ -26,7 +26,7 @@ class Meme(commands.Cog):
       await message.channel.send(embed=embed)
 
     elif ("ben" or "Ben") in message.content:
-      await message.channel.send("Did someone say Ben!?")
+      await message.channel.send("Ben!?")
       embed = nextcord.Embed(title="")
       embed.set_image(url="https://media1.tenor.com/m/82Rr2PPBCtIAAAAd/cat-jam-cat.gif")
       await message.channel.send(embed=embed)
