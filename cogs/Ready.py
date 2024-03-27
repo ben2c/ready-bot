@@ -41,7 +41,7 @@ class Ready (commands.Cog):
         await interaction.response.send_message("Get your asses online to play: "+ settings.gameNameArr[queue_id] + str(*settings.playerArr[queue_id]))
       
       else:
-        await interaction.response.send_message("Queue for " + settings.gameNameArr[queue_id] + ": " + str(*settings.playerArrString[queue_id])  + " | Missing " + str(settings.queueSize[queue_id] - len(settings.playerArr[queue_id])) + " more!")
+        await interaction.response.send_message(settings.gameNameArr[queue_id] + ": " + str(*settings.playerArrString[queue_id])  + " | Missing " + str(settings.queueSize[queue_id] - len(settings.playerArr[queue_id])) + " more!")
     
     else:
       await interaction.response.send_message("Final catch, idk what the fuck you entered, allow me to fix it")

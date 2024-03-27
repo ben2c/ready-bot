@@ -18,7 +18,7 @@ class Check (commands.Cog):
 
     for queue_id in range(len(settings.playerArrString)):
 
-      allqueues += "Queue " + settings.gameNameArr[queue_id] + ": " + str(*settings.playerArrString[queue_id]) + "\n"
+      allqueues += settings.gameNameArr[queue_id] + ": " + str(*settings.playerArrString[queue_id]) + " | " + str(len(settings.playerArr[queue_id])) + "/" + str(settings.queueSize[queue_id]) + "\n"
 
     await interaction.response.send_message(allqueues)
 

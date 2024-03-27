@@ -16,7 +16,7 @@ class ReadyAll (commands.Cog):
     player_id = '<@' + f'{interaction.user.id}' + '>'
     player_username = interaction.user.global_name
 
-    await interaction.response.send_message("Added to all available queues")
+    await interaction.response.send_message("Added to all queues")
 
     for queue in settings.playerArr:
 
