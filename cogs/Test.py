@@ -15,7 +15,7 @@ class Test (commands.Cog):
   async def ryan(self, interaction: Interaction):
     await interaction.response.send_message("REEEONNNNN")
     embed = nextcord.Embed(title="Master Ni")
-    embed.set_image(url="https://media1.tenor.com/m/Kcd9s-ao_VkAAAAC/kekw.gif")
+    embed.set_image(url="https://media1.tenor.com/m/SadoB6GZQe4AAAAd/reon.gif")
     await interaction.channel.send(embed=embed)
 
   # @nextcord.slash_command(name = 'test2', description = 'check queue', guild_ids=[testServerId])

@@ -11,9 +11,16 @@ class Check (commands.Cog):
 
   testServerId = 758151181494255646
 
-  @nextcord.slash_command(name = 'check', description = 'Check Queue', guild_ids=[testServerId])
-  async def check(self, interaction: Interaction, queue_id: int):
-    await interaction.response.send_message("Queue : " + str(*settings.playerArrString[queue_id]))
+  @nextcord.slash_command(name = 'check', description = 'Check Queues', guild_ids=[testServerId])
+  async def check(self, interaction: Interaction):
+
+    allqueues = ""
+
+    for queue_id in range(len(settings.playerArrString)):
+
+      allqueues += "Queue " + settings.gameNameArr[queue_id] + ": " + str(*settings.playerArrString[queue_id]) + "\n"
+
+    await interaction.response.send_message(allqueues)
 
 def setup(client):
   client.add_cog(Check(client))
