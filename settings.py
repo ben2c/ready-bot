@@ -5,7 +5,7 @@ def init():
   global playerArrString
   global queueSize
 
-  playerArr = [[], [], []]
+  playerArr = [["Test", "wow"], [], []]
   gameNameArr = ["League", "Valorant", "ARAM"]
-  playerArrString = [[], [], []]
+  playerArrString = [["TEST", "WOW"], [], []]
   queueSize = [5, 5, 5]

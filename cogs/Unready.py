@@ -7,9 +7,9 @@ class Unready (commands.Cog):
   def __init__(self, client):
     self.client = client
 
-  testServerId = 758151181494255646
+  testServerId = 389588257106690051
 
-  @nextcord.slash_command(name = 'unready', description = 'Unready for a queue', guild_ids=[testServerId])
+  @nextcord.slash_command(name = 'nr', description = 'Unready for a queue', guild_ids=[testServerId])
   async def unready(self, interaction: Interaction, queue: str = SlashOption(name = "queue", description = "Choose a queue")):
 
     queue_id = settings.gameNameArr.index(queue)

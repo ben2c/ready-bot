@@ -3,24 +3,21 @@ from nextcord import Interaction, SlashOption
 from nextcord.ext import commands
 import settings
 
-class Ready (commands.Cog):
+class TimeReady (commands.Cog):
   
   def __init__(self, client):
     self.client = client
 
   testServerId = 389588257106690051
 
-  @nextcord.slash_command(name = 'r', description = 'Ready up for a queue', guild_ids=[testServerId])
-  async def ready(self, interaction: Interaction, queue: str = SlashOption(name = "queue", description = "Choose a queue")):
+  @nextcord.slash_command(name = 'tr', description = 'Ready up but expires after certain amount of time', guild_ids=[testServerId])
+  async def timeready(self, interaction: Interaction, queue: str = SlashOption(name = "queue", description = "Choose a queue"), time: int = SlashOption(name="time", description="Amount in minutes to stay in queue")):
 
     queue_id = settings.gameNameArr.index(queue)
+    time_min = time * 60
 
     player_id = '<@' + f'{interaction.user.id}' + '>'
     player_username = interaction.user.global_name
-
-    #Checks if entered queue is in range
-    # if queue_id >= len(settings.gameNameArr) or queue_id < 0:
-    #   await interaction.response.send_message("Please enter a valid queue ")
 
     #Checks if player is already in queue
     if player_id in settings.playerArr[queue_id]:
@@ -41,13 +38,13 @@ class Ready (commands.Cog):
         await interaction.response.send_message("Get your asses online to play: "+ settings.gameNameArr[queue_id] + str(*settings.playerArr[queue_id]))
       
       else:
-        await interaction.response.send_message(settings.gameNameArr[queue_id] + ": " + str(', '.join(settings.playerArrString[queue_id]))  + " | Missing " + str(settings.queueSize[queue_id] - len(settings.playerArr[queue_id])) + " more!")
+        await interaction.response.send_message(settings.gameNameArr[queue_id] + ": " + str(*settings.playerArrString[queue_id])  + " | Missing " + str(settings.queueSize[queue_id] - len(settings.playerArr[queue_id])) + " more!")
     
     else:
       await interaction.response.send_message("Final catch, idk what the fuck you entered, allow me to fix it")
 
   #Autocomplete game selection
-  @ready.on_autocomplete("queue")
+  @timeready.on_autocomplete("queue")
   async def readyQueue(self, interaction: Interaction, queue: str):
     if not queue:
         # send the full autocomplete list
@@ -58,4 +55,4 @@ class Ready (commands.Cog):
     await interaction.response.send_autocomplete(get_near_queue)
 
 def setup(client):
-  client.add_cog(Ready(client))
+  client.add_cog(TimeReady(client))

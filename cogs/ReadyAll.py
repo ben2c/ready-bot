@@ -8,9 +8,9 @@ class ReadyAll (commands.Cog):
   def __init__(self, client):
     self.client = client
 
-  testServerId = 758151181494255646
+  testServerId = 389588257106690051
 
-  @nextcord.slash_command(name = 'readyall', description = 'Ready up for all queue', guild_ids=[testServerId])
+  @nextcord.slash_command(name = 'rall', description = 'Ready up for all queue', guild_ids=[testServerId])
   async def readyall(self, interaction: Interaction):
 
     player_id = '<@' + f'{interaction.user.id}' + '>'

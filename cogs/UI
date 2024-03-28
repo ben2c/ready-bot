@@ -26,7 +26,7 @@ class UI(commands.Cog):
   def __init__(self,client):
     self.client = client
 
-  testServerId = 758151181494255646
+  testServerId = 389588257106690051
 
   @nextcord.slash_command(name = "button", description = "Ready up for Queue", guild_ids=[testServerId])
   async def readyQueue(self, interaction: Interaction):

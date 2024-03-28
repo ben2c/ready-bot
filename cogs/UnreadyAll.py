@@ -7,9 +7,9 @@ class UnreadyAll (commands.Cog):
   def __init__(self, client):
     self.client = client
 
-  testServerId = 758151181494255646
+  testServerId = 389588257106690051
 
-  @nextcord.slash_command(name = 'unreadyall', description = 'Unready for all queues', guild_ids=[testServerId])
+  @nextcord.slash_command(name = 'nrall', description = 'Unready for all queues', guild_ids=[testServerId])
   async def unreadyall(self, interaction: Interaction):
 
     await interaction.response.send_message("You have been removed from all queues")
