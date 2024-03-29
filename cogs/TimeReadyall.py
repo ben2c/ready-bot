@@ -45,6 +45,9 @@ class TimeReadyAll (commands.Cog):
         #Checks if queue is full after player is added
         if len(settings.playerArr[queue_id]) == settings.queueSize[queue_id]:
           await interaction.followup.send("Get your asses online to play: "+ settings.gameNameArr[queue_id] +" | " + str(', '.join(settings.playerArr[queue_id])))
+          
+          #Wait 5 minutes and clears the queue that queue is still full, also removes the players from the other queues that they're in
+          #await asyncio.sleep(300)
 
 
     #removes player from queue after set time

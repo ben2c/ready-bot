@@ -22,10 +22,11 @@ class Unready (commands.Cog):
     if player_id in settings.playerArr[queue_id]:
       settings.playerArr[queue_id].remove(player_id)
       settings.playerArrString[queue_id].remove(player_username)
-      await interaction.response.send_message("You have been removed from " + settings.gameNameArr[queue_id])
+      await interaction.response.send_message("You have been removed from " + settings.gameNameArr[queue_id], ephemeral=True)
 
+    #sus
     elif player_id not in settings.playerArr:
-      await interaction.response.send_message("Enter a valid queue")
+      await interaction.response.send_message("You're not in this queue", ephemeral=True)
 
     else:
       await interaction.response.send_message("Final catch, idk what the fuck you entered, allow me to fix it")

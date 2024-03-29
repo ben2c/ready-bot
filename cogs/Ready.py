@@ -26,11 +26,11 @@ class Ready (commands.Cog):
 
     #Checks if player is already in queue
     if player_id in settings.playerArr[queue_id]:
-      await interaction.response.send_message("You're already queued for " + settings.gameNameArr[queue_id])
+      await interaction.response.send_message("You're already queued for " + settings.gameNameArr[queue_id], ephemeral=True)
     
     #Checks if Queue is full
     elif len(settings.playerArr[queue_id]) == settings.queueSize[queue_id]:
-      await interaction.response.send_message("This queue is full")
+      await interaction.response.send_message("This queue is full", ephemeral=True)
 
     elif queue_id < len(settings.playerArr):
 
