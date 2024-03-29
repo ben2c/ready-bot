@@ -12,7 +12,7 @@ intents.members = True
 client = commands.Bot(command_prefix = '!', intents=intents)
 
 #Server for testing purposes, need to remove once in prod, but takes some time for commands to load
-testServerId = 758151181494255646
+testServerId = 389588257106690051
 
 #Initializes arrays
 settings.init()

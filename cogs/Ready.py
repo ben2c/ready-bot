@@ -8,12 +8,14 @@ class Ready (commands.Cog):
   def __init__(self, client):
     self.client = client
 
-  testServerId = 758151181494255646
+  testServerId = 389588257106690051
 
-  @nextcord.slash_command(name = 'ready', description = 'Ready up for a queue', guild_ids=[testServerId])
+  @nextcord.slash_command(name = 'r', description = 'Ready up for a queue', guild_ids=[testServerId])
   async def ready(self, interaction: Interaction, queue: str = SlashOption(name = "queue", description = "Choose a queue")):
 
-    queue_id = settings.gameNameArr.index(queue)
+    gameNameArrLower = [game.lower() for game in settings.gameNameArr]
+
+    queue_id = gameNameArrLower.index(queue.lower())
 
     player_id = '<@' + f'{interaction.user.id}' + '>'
     player_username = interaction.user.global_name
@@ -24,11 +26,11 @@ class Ready (commands.Cog):
 
     #Checks if player is already in queue
     if player_id in settings.playerArr[queue_id]:
-      await interaction.response.send_message("You're already queued for " + settings.gameNameArr[queue_id])
+      await interaction.response.send_message("You're already queued for " + settings.gameNameArr[queue_id], ephemeral=True)
     
     #Checks if Queue is full
     elif len(settings.playerArr[queue_id]) == settings.queueSize[queue_id]:
-      await interaction.response.send_message("This queue is full")
+      await interaction.response.send_message("This queue is full", ephemeral=True)
 
     elif queue_id < len(settings.playerArr):
 
@@ -36,12 +38,16 @@ class Ready (commands.Cog):
       settings.playerArr[queue_id].append(player_id)
       settings.playerArrString[queue_id].append(player_username)
 
+      #Updates channel topic
+      # channel = nextcord.utils.get(self.client.get_all_channels(), name="our-glorious-robot-overlords")
+      # await channel.edit(topic = 'Hello!')
+
       #Checks if queue is full after player is added
       if len(settings.playerArr[queue_id]) == settings.queueSize[queue_id]:
-        await interaction.response.send_message("Get your asses online to play: "+ settings.gameNameArr[queue_id] + str(*settings.playerArr[queue_id]))
+        await interaction.response.send_message("Get your asses online to play: "+ settings.gameNameArr[queue_id] + " | " + str(', '.join(settings.playerArr[queue_id])))
       
       else:
-        await interaction.response.send_message("Queue for " + settings.gameNameArr[queue_id] + ": " + str(*settings.playerArrString[queue_id])  + " | Missing " + str(settings.queueSize[queue_id] - len(settings.playerArr[queue_id])) + " more!")
+        await interaction.response.send_message(settings.gameNameArr[queue_id] + ": " + str(', '.join(settings.playerArrString[queue_id]))  + " | Missing " + str(settings.queueSize[queue_id] - len(settings.playerArr[queue_id])) + " more!")
     
     else:
       await interaction.response.send_message("Final catch, idk what the fuck you entered, allow me to fix it")

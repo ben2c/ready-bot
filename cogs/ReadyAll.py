@@ -8,19 +8,19 @@ class ReadyAll (commands.Cog):
   def __init__(self, client):
     self.client = client
 
-  testServerId = 758151181494255646
+  testServerId = 389588257106690051
 
-  @nextcord.slash_command(name = 'readyall', description = 'Ready up for all queue', guild_ids=[testServerId])
+  @nextcord.slash_command(name = 'rall', description = 'Ready up for all queue', guild_ids=[testServerId])
   async def readyall(self, interaction: Interaction):
 
     player_id = '<@' + f'{interaction.user.id}' + '>'
     player_username = interaction.user.global_name
 
-    await interaction.response.send_message("Added to all available queues")
+    await interaction.response.send_message("Added to all queues")
 
-    for queue in settings.playerArr:
+    for queue in settings.gameNameArr:
 
-      queue_id = settings.playerArr.index(queue)
+      queue_id = settings.gameNameArr.index(queue)
 
       #Checks if player is already in queue
       if player_id in settings.playerArr[queue_id]:
@@ -32,9 +32,9 @@ class ReadyAll (commands.Cog):
         settings.playerArr[queue_id].append(player_id)
         settings.playerArrString[queue_id].append(player_username)
         
-                #Checks if queue is full after player is added
+        #Checks if queue is full after player is added
         if len(settings.playerArr[queue_id]) == settings.queueSize[queue_id]:
-          await interaction.followup.send("Get your asses online to play: "+ settings.gameNameArr[queue_id] +" | " + str(*settings.playerArr[queue_id]))
+          await interaction.followup.send("Get your asses online to play: "+ settings.gameNameArr[queue_id] +" | " + str(', '.join(settings.playerArr[queue_id])))
 
 
 def setup(client):
