@@ -1,7 +1,7 @@
 import nextcord
 from nextcord import Interaction
 from nextcord.ext import commands
-import settings
+import arrays
 
 
 class Check (commands.Cog):
@@ -16,9 +16,9 @@ class Check (commands.Cog):
 
     allqueues = ""
 
-    for queue_id in range(len(settings.playerArrString)):
+    for queue_id in range(len(arrays.playerArrString)):
 
-      allqueues += settings.gameNameArr[queue_id] + ": " + str(', '.join(settings.playerArrString[queue_id])) + " | " + str(len(settings.playerArr[queue_id])) + "/" + str(settings.queueSize[queue_id]) + "\n"
+      allqueues += arrays.gameNameArr[queue_id] + ": " + str(', '.join(arrays.playerArrString[queue_id])) + " | " + str(len(arrays.playerArr[queue_id])) + "/" + str(arrays.queueSize[queue_id]) + "\n"
 
     await interaction.response.send_message(allqueues)
 

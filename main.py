@@ -1,7 +1,7 @@
 import nextcord
 from nextcord import Interaction
 from nextcord.ext import commands
-import settings
+import arrays
 import os
 from dotenv import load_dotenv
 
@@ -15,7 +15,7 @@ client = commands.Bot(command_prefix = '!', intents=intents)
 testServerId = 389588257106690051
 
 #Initializes arrays
-settings.init()
+arrays.init()
 
 #Bot Startup
 @client.event
