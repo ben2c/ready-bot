@@ -1,7 +1,7 @@
 import nextcord
 from nextcord import Interaction, SlashOption
 from nextcord.ext import commands
-import settings
+import arrays
 
 class UnreadyAll (commands.Cog):
   def __init__(self, client):
@@ -17,13 +17,13 @@ class UnreadyAll (commands.Cog):
     player_id = '<@' + f'{interaction.user.id}' + '>'
     player_username = interaction.user.global_name
     
-    for queue in settings.playerArr:
+    for queue in arrays.playerArr:
 
-      queue_id = settings.playerArr.index(queue)
+      queue_id = arrays.playerArr.index(queue)
 
-      if player_id in settings.playerArr[queue_id]:
-        settings.playerArr[queue_id].remove(player_id)
-        settings.playerArrString[queue_id].remove(player_username)
+      if player_id in arrays.playerArr[queue_id]:
+        arrays.playerArr[queue_id].remove(player_id)
+        arrays.playerArrString[queue_id].remove(player_username)
 
 
 

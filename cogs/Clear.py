@@ -1,7 +1,7 @@
 import nextcord
 from nextcord import Interaction, SlashOption
 from nextcord.ext import commands
-import settings
+import arrays
 import asyncio
 
 class Clear (commands.Cog):
@@ -15,12 +15,12 @@ class Clear (commands.Cog):
 
     await interaction.response.send_message("All queues cleared")
   
-    for queue in settings.playerArr:
+    for queue in arrays.playerArr:
 
-      queue_id = settings.playerArr.index(queue)
+      queue_id = arrays.playerArr.index(queue)
 
-      settings.playerArr[queue_id].clear()
-      settings.playerArrString[queue_id].clear()
+      arrays.playerArr[queue_id].clear()
+      arrays.playerArrString[queue_id].clear()
 
     # async def cancel_me():
     #   print('cancel_me(): before sleep')

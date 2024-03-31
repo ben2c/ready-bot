@@ -1,7 +1,8 @@
 import nextcord
 from nextcord import Interaction, SlashOption
 from nextcord.ext import commands
-import settings
+import arrays
+import asyncio
 
 class ReadyAll (commands.Cog):
   
@@ -13,28 +14,52 @@ class ReadyAll (commands.Cog):
   @nextcord.slash_command(name = 'rall', description = 'Ready up for all queue', guild_ids=[testServerId])
   async def readyall(self, interaction: Interaction):
 
+    clear_queue = False
     player_id = '<@' + f'{interaction.user.id}' + '>'
     player_username = interaction.user.global_name
 
     await interaction.response.send_message("Added to all queues")
 
-    for queue in settings.gameNameArr:
+    for queue in arrays.gameNameArr:
 
-      queue_id = settings.gameNameArr.index(queue)
+      queue_id = arrays.gameNameArr.index(queue)
 
       #Checks if player is already in queue
-      if player_id in settings.playerArr[queue_id]:
+      if player_id in arrays.playerArr[queue_id]:
        break
       
-      elif queue_id <= len(settings.playerArr):
+      elif queue_id <= len(arrays.playerArr):
 
         #Adds player to queue
-        settings.playerArr[queue_id].append(player_id)
-        settings.playerArrString[queue_id].append(player_username)
+        arrays.playerArr[queue_id].append(player_id)
+        arrays.playerArrString[queue_id].append(player_username)
         
         #Checks if queue is full after player is added
-        if len(settings.playerArr[queue_id]) == settings.queueSize[queue_id]:
-          await interaction.followup.send("Get your asses online to play: "+ settings.gameNameArr[queue_id] +" | " + str(', '.join(settings.playerArr[queue_id])))
+        if len(arrays.playerArr[queue_id]) == arrays.queueSize[queue_id]:
+          await interaction.followup.send("Get your asses online to play: "+ arrays.gameNameArr[queue_id] +" | " + str(', '.join(arrays.playerArr[queue_id])))
+          clear_queue = True
+          clear_queue_id = queue_id
+
+    #Wait 5 minutes and clears the queue that queue is still full, also removes the players from the other queues that they're in
+    if clear_queue == True:
+
+      await asyncio.sleep(300)
+      if len(arrays.playerArr[clear_queue_id]) == arrays.queueSize[clear_queue_id]:
+          
+        tempPlayerArray = arrays.playerArr[clear_queue_id]
+
+        for player in reversed(tempPlayerArray):
+
+          for index_game in range(len(arrays.gameNameArr)):
+
+            if player in arrays.playerArr[index_game]:
+
+              index_player = arrays.playerArr[index_game].index(player)
+
+              arrays.playerArr[index_game].remove(player)
+              arrays.playerArrString[index_game].pop(index_player)
+
+        await interaction.followup.send("Players in full queue were removed from all queues")
 
 
 def setup(client):
