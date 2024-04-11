@@ -11,14 +11,16 @@ class ReadyAll (commands.Cog):
 
   testServerId = 389588257106690051
 
-  @nextcord.slash_command(name = 'rall', description = 'Ready up for all queue', guild_ids=[testServerId])
+  @nextcord.slash_command(name = 'rall', description = 'Ready up for all queue for 1 hour', guild_ids=[testServerId])
   async def readyall(self, interaction: Interaction):
-
+    
+    timeout_status=False
+    channel = self.client.get_channel(716158981470421052)
     clear_queue = False
     player_id = '<@' + f'{interaction.user.id}' + '>'
     player_username = interaction.user.global_name
 
-    await interaction.response.send_message("Added to all queues")
+    await interaction.response.send_message("Added to all queues for 1h")
 
     for queue in arrays.gameNameArr:
 
@@ -60,7 +62,20 @@ class ReadyAll (commands.Cog):
               arrays.playerArrString[index_game].pop(index_player)
 
         await interaction.followup.send("Players in full queue were removed from all queues")
+  
+    #removes player from queue after 1H
+    await asyncio.sleep(3600)
+    for queue in arrays.playerArr:
 
+      queue_id = arrays.playerArr.index(queue)
+
+      if player_id in arrays.playerArr[queue_id]:
+        arrays.playerArr[queue_id].remove(player_id)
+        arrays.playerArrString[queue_id].remove(player_username)
+        timeout_status=True
+
+    if timeout_status == True:
+      await channel.send(player_username + " timed out from all queues")
 
 def setup(client):
   client.add_cog(ReadyAll(client))

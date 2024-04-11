@@ -14,7 +14,9 @@ class TimeReadyAll (commands.Cog):
   @nextcord.slash_command(name = 'trall', description = 'Ready up for all queues but expires after certain amount of time', guild_ids=[testServerId])
   async def timereadyall(self, interaction: Interaction, time: int = SlashOption(name="time", description="Amount in minutes to stay in queue")):
 
+    channel = self.client.get_channel(716158981470421052)
     clear_queue = False
+    timeout_status=False
     time_sec = time * 60
 
     #Shortens display time
@@ -26,12 +28,11 @@ class TimeReadyAll (commands.Cog):
     player_id = '<@' + f'{interaction.user.id}' + '>'
     player_username = interaction.user.global_name
 
-    await interaction.response.send_message("Added to all queues for " +  display_time)
-
     if time < 0:
       await interaction.response.send_message("Please enter a positive number", ephemeral=True)
 
     else:
+      await interaction.response.send_message("Added to all queues for " +  display_time)
       for queue in arrays.gameNameArr:
 
         queue_id = arrays.gameNameArr.index(queue)
@@ -83,7 +84,10 @@ class TimeReadyAll (commands.Cog):
       if player_id in arrays.playerArr[queue_id]:
         arrays.playerArr[queue_id].remove(player_id)
         arrays.playerArrString[queue_id].remove(player_username)
-    await interaction.followup.send(player_username + " timed out from all queues")
+        timeout_status=True
+        
+    if timeout_status == True:
+      await channel.send(player_username + " timed out from all queues")
 
 
 def setup(client):

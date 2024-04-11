@@ -11,9 +11,10 @@ class Ready (commands.Cog):
 
   testServerId = 389588257106690051
 
-  @nextcord.slash_command(name = 'r', description = 'Ready up for a queue', guild_ids=[testServerId])
+  @nextcord.slash_command(name = 'r', description = 'Ready up for a queue for 1 hour', guild_ids=[testServerId])
   async def ready(self, interaction: Interaction, queue: str = SlashOption(name = "queue", description = "Choose a queue")):
 
+    channel = self.client.get_channel(716158981470421052)
     gameNameArrLower = [game.lower() for game in arrays.gameNameArr]
     queue_id = gameNameArrLower.index(queue.lower())
 
@@ -72,6 +73,13 @@ class Ready (commands.Cog):
               arrays.playerArrString[index_game].pop(index_player)
 
         await interaction.followup.send("Players in full queue were removed from all queues")
+  
+    #removes player from queue after 1H
+    await asyncio.sleep(3600)
+    if player_id in arrays.playerArr[queue_id]:  
+      arrays.playerArr[queue_id].remove(player_id)
+      arrays.playerArrString[queue_id].remove(player_username)
+      await channel.send(player_username + " timed out from " + arrays.gameNameArr[queue_id])
 
   #Autocomplete game selection
   @ready.on_autocomplete("queue")

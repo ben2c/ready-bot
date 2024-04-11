@@ -17,6 +17,7 @@ class TimeReady (commands.Cog):
     gameNameArrLower = [game.lower() for game in arrays.gameNameArr]
     queue_id = gameNameArrLower.index(queue.lower())
 
+    channel = self.client.get_channel(716158981470421052)
     clear_queue = False
     time_sec = time * 60
 
@@ -83,9 +84,10 @@ class TimeReady (commands.Cog):
 
     #removes player from queue after set time
     await asyncio.sleep(time_sec)
-    arrays.playerArr[queue_id].remove(player_id)
-    arrays.playerArrString[queue_id].remove(player_username)
-    await interaction.followup.send(player_username + " timed out from " + arrays.gameNameArr[queue_id])
+    if player_id in arrays.playerArr[queue_id]:    
+      arrays.playerArr[queue_id].remove(player_id)
+      arrays.playerArrString[queue_id].remove(player_username)
+      await channel.send(player_username + " timed out from " + arrays.gameNameArr[queue_id])
 
   #Autocomplete game selection
   @timeready.on_autocomplete("queue")
