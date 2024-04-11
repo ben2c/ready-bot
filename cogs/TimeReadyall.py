@@ -16,6 +16,7 @@ class TimeReadyAll (commands.Cog):
 
     channel = self.client.get_channel(716158981470421052)
     clear_queue = False
+    timeout_status=False
     time_sec = time * 60
 
     #Shortens display time
@@ -83,7 +84,10 @@ class TimeReadyAll (commands.Cog):
       if player_id in arrays.playerArr[queue_id]:
         arrays.playerArr[queue_id].remove(player_id)
         arrays.playerArrString[queue_id].remove(player_username)
-    await channel.send(player_username + " timed out from all queues")
+        timeout_status=True
+        
+    if timeout_status == True:
+      await channel.send(player_username + " timed out from all queues")
 
 
 def setup(client):

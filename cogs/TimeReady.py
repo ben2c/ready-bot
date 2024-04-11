@@ -84,9 +84,10 @@ class TimeReady (commands.Cog):
 
     #removes player from queue after set time
     await asyncio.sleep(time_sec)
-    arrays.playerArr[queue_id].remove(player_id)
-    arrays.playerArrString[queue_id].remove(player_username)
-    await channel.send(player_username + " timed out from " + arrays.gameNameArr[queue_id])
+    if player_id in arrays.playerArr[queue_id]:    
+      arrays.playerArr[queue_id].remove(player_id)
+      arrays.playerArrString[queue_id].remove(player_username)
+      await channel.send(player_username + " timed out from " + arrays.gameNameArr[queue_id])
 
   #Autocomplete game selection
   @timeready.on_autocomplete("queue")
