@@ -10,6 +10,9 @@ class ReadyAll (commands.Cog):
     self.client = client
 
   testServerId = 389588257106690051
+  TROLL_TIMEOUT_SECONDS = 60
+  DEFAULT_TIMEOUT_SECONDS = 3600
+  listOfTrolls = ["255976924428500993"]
 
   @nextcord.slash_command(name = 'rall', description = 'Ready up for all queue for 1 hour', guild_ids=[testServerId])
   async def readyall(self, interaction: Interaction):
@@ -62,9 +65,12 @@ class ReadyAll (commands.Cog):
               arrays.playerArrString[index_game].pop(index_player)
 
         await interaction.followup.send("Players in full queue were removed from all queues")
-  
+
     #removes player from queue after 1H
-    await asyncio.sleep(3600)
+    if interaction.user.id in self.listOfTrolls:
+      await asyncio.sleep(self.TROLL_TIMEOUT_SECONDS)
+    else:
+      await asyncio.sleep(self.DEFAULT_TIMEOUT_SECONDS)
     for queue in arrays.playerArr:
 
       queue_id = arrays.playerArr.index(queue)
