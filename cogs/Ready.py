@@ -10,6 +10,8 @@ class Ready (commands.Cog):
     self.client = client
 
   testServerId = 389588257106690051
+  timeoutTimeSeconds = 3600
+  trollList = ["Ryan"]
 
   @nextcord.slash_command(name = 'r', description = 'Ready up for a queue for 1 hour', guild_ids=[testServerId])
   async def ready(self, interaction: Interaction, queue: str = SlashOption(name = "queue", description = "Choose a queue")):
@@ -74,8 +76,11 @@ class Ready (commands.Cog):
 
         await interaction.followup.send("Players in full queue were removed from all queues")
   
+    if player_username in self.trollList:
+      self.timeoutTimeSeconds = 60
+
     #removes player from queue after 1H
-    await asyncio.sleep(3600)
+    await asyncio.sleep(self.timeoutTimeSeconds)
     if player_id in arrays.playerArr[queue_id]:  
       arrays.playerArr[queue_id].remove(player_id)
       arrays.playerArrString[queue_id].remove(player_username)
