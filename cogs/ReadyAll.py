@@ -67,6 +67,8 @@ class ReadyAll (commands.Cog):
   
     if interaction.user.id in self.listOfTrolls:
       self.timeoutTimeSeconds = 60
+    else:
+      self.timeoutTimeSeconds = self.DEFAULT_TIMEOUT_SECONDS
 
     #removes player from queue after 1H
     await asyncio.sleep(self.timeoutTimeSeconds)

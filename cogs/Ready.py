@@ -10,7 +10,7 @@ class Ready (commands.Cog):
     self.client = client
 
   testServerId = 389588257106690051
-  timeoutTimeSeconds = 3600
+  DEFAULT_TIMEOUT_SECONDS = 3600
   listOfTrolls = ["255976924428500993"]
 
   @nextcord.slash_command(name = 'r', description = 'Ready up for a queue for 1 hour', guild_ids=[testServerId])
@@ -78,6 +78,8 @@ class Ready (commands.Cog):
   
     if interaction.user.id in self.listOfTrolls:
       self.timeoutTimeSeconds = 60
+    else:
+      self.timeoutTimeSeconds = self.DEFAULT_TIMEOUT_SECONDS
 
     #removes player from queue after 1H
     await asyncio.sleep(self.timeoutTimeSeconds)
