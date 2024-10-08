@@ -11,7 +11,7 @@ class ReadyAll (commands.Cog):
 
   testServerId = 389588257106690051
   timeoutTimeSeconds = 3600
-  trollList = ["Ryan"]
+  listOfTrolls = ["255976924428500993"]
 
   @nextcord.slash_command(name = 'rall', description = 'Ready up for all queue for 1 hour', guild_ids=[testServerId])
   async def readyall(self, interaction: Interaction):
@@ -65,7 +65,7 @@ class ReadyAll (commands.Cog):
 
         await interaction.followup.send("Players in full queue were removed from all queues")
   
-    if player_username in self.trollList:
+    if interaction.user.id in self.listOfTrolls:
       self.timeoutTimeSeconds = 60
 
     #removes player from queue after 1H
