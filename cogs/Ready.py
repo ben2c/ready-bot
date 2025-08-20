@@ -166,7 +166,7 @@ class JoinQueueView(nextcord.ui.View):
                 await interaction.followup.send("Players in full queue were removed from all queues")
         else:
             await interaction.response.send_message(
-                f"You have joined {arrays.gameNameArr[self.queue_id]}! Current queue: {', '.join(arrays.playerArrString[self.queue_id])}"
+                player_username + f" has joined {arrays.gameNameArr[self.queue_id]}! Current queue: {', '.join(arrays.playerArrString[self.queue_id])}"
             )
 
     @nextcord.ui.button(label="Remove From Queue", style=nextcord.ButtonStyle.danger)
