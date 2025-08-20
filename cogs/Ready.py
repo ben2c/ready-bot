@@ -97,7 +97,7 @@ class Ready(commands.Cog):
             if player_id in arrays.playerArr[queue_id]:
                 arrays.playerArr[queue_id].remove(player_id)
                 arrays.playerArrString[queue_id].remove(player_username)
-                await Interaction.channel.send(player_username + " timed out from " + arrays.gameNameArr[queue_id])
+                await channel.send(player_username + " timed out from " + arrays.gameNameArr[queue_id])
         except asyncio.CancelledError:
             # Timer was cancelled (user unreadied)
             pass

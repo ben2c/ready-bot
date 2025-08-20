@@ -35,21 +35,25 @@ class MultiQueueSelectView(nextcord.ui.View):
     def __init__(self, cog):
         super().__init__(timeout=60)
         self.cog = cog
-        self.timed_out_queues = {}  # Track player_id -> [queue_names]
+        self.timed_out_queues = {}
 
-    @nextcord.ui.select(
-        placeholder="Choose queues...",
-        min_values=1,
-        max_values=len(arrays.gameNameArr),
-        options=[
-            nextcord.SelectOption(label=game, value=str(idx))
-            for idx, game in enumerate(arrays.gameNameArr)
-        ]
-    )
-    async def select_queues(self, select: nextcord.ui.Select, interaction: Interaction):
+        select = nextcord.ui.Select(
+            placeholder="Choose queues...",
+            min_values=1,
+            max_values=len(arrays.gameNameArr),
+            options=[
+                nextcord.SelectOption(label=game, value=str(idx))
+                for idx, game in enumerate(arrays.gameNameArr)
+            ]
+        )
+        select.callback = self.select_queues_callback  # <-- Use new callback
+        self.add_item(select)
+
+    async def select_queues_callback(self, interaction: Interaction):
+        select = interaction.data  # Get the select data from interaction
         player_id = '<@' + f'{interaction.user.id}' + '>'
         player_username = interaction.user.global_name
-        selected_indices = [int(v) for v in select.values]
+        selected_indices = [int(v) for v in interaction.data['values']]
         queued_games = []
         already_queued = []
         full_queues = []
@@ -64,7 +68,6 @@ class MultiQueueSelectView(nextcord.ui.View):
             arrays.playerArrString[queue_id].append(player_username)
             queued_games.append(arrays.gameNameArr[queue_id])
 
-            # Cancel any existing timer for this player in this queue
             if player_id in self.cog.player_timers and queue_id in self.cog.player_timers[player_id]:
                 self.cog.player_timers[player_id][queue_id].cancel()
 
@@ -72,7 +75,6 @@ class MultiQueueSelectView(nextcord.ui.View):
             channel = interaction.channel
             if player_id not in self.cog.player_timers:
                 self.cog.player_timers[player_id] = {}
-            # Setup timed out queues tracking
             if player_id not in self.timed_out_queues:
                 self.timed_out_queues[player_id] = []
             self.cog.player_timers[player_id][queue_id] = asyncio.create_task(
