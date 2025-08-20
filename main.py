@@ -12,7 +12,7 @@ intents.members = True
 client = commands.Bot(command_prefix = '!', intents=intents)
 
 #Server for testing purposes, need to remove once in prod, but takes some time for commands to load
-testServerId = 389588257106690051
+# testServerId = 389588257106690051
 
 #Initializes arrays
 arrays.init()
@@ -36,5 +36,7 @@ if __name__ == '__main__':
         client.load_extension(extension)
 
 
-#Bot Start Up Token
+#Bot Start Up Token for Production
 client.run(os.getenv('TOKEN')) #Need .env file with bot token
+
+#client.run('<TOKEN>') #Use this for local, comment out the above line

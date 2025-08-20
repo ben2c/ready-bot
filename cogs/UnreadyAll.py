@@ -3,29 +3,66 @@ from nextcord import Interaction, SlashOption
 from nextcord.ext import commands
 import arrays
 
-class UnreadyAll (commands.Cog):
-  def __init__(self, client):
-    self.client = client
+class UnreadyAll(commands.Cog):
+    def __init__(self, client):
+        self.client = client
 
-  testServerId = 389588257106690051
+    testServerId = 389588257106690051
 
-  @nextcord.slash_command(name = 'nrall', description = 'Unready for all queues', guild_ids=[testServerId])
-  async def unreadyall(self, interaction: Interaction):
+    @nextcord.slash_command(
+        name='nrall',
+        description='Unready for all queues',
+        guild_ids=[testServerId]
+    )
+    async def unreadyall(self, interaction: Interaction):
 
-    await interaction.response.send_message("You have been removed from all queues")
+        player_id = '<@' + f'{interaction.user.id}' + '>'
+        player_username = interaction.user.global_name
 
-    player_id = '<@' + f'{interaction.user.id}' + '>'
-    player_username = interaction.user.global_name
-    
-    for queue in arrays.playerArr:
+        removed = False
+        for queue in arrays.playerArr:
+            queue_id = arrays.playerArr.index(queue)
+            if player_id in arrays.playerArr[queue_id]:
+                arrays.playerArr[queue_id].remove(player_id)
+                arrays.playerArrString[queue_id].remove(player_username)
+                removed = True
 
-      queue_id = arrays.playerArr.index(queue)
+        # Cancel the user's timer in ReadyAll cog if it exists
+        readyall_cog = self.client.get_cog("ReadyAll")
+        if readyall_cog:
+            timer = readyall_cog.player_timers.get(player_id)
+            if timer:
+                timer.cancel()
+                readyall_cog.player_timers.pop(player_id, None)
 
-      if player_id in arrays.playerArr[queue_id]:
-        arrays.playerArr[queue_id].remove(player_id)
-        arrays.playerArrString[queue_id].remove(player_username)
+        # Cancel the user's timer in Ready cog if it exists
+        ready_cog = self.client.get_cog("Ready")
+        if ready_cog:
+            timer = ready_cog.player_timers.get(player_id)
+            if timer:
+                timer.cancel()
+                ready_cog.player_timers.pop(player_id, None)
 
+        # Cancel the user's timer in TimeReady cog if it exists
+        timeready_cog = self.client.get_cog("TimeReady")
+        if timeready_cog:
+            timer = timeready_cog.player_timers.get(player_id)
+            if timer:
+                timer.cancel()
+                timeready_cog.player_timers.pop(player_id, None)
 
+        # Cancel the user's timer in TimeReadyAll cog if it exists
+        timereadyall_cog = self.client.get_cog("TimeReadyAll")
+        if timereadyall_cog:
+            timer = timereadyall_cog.player_timers.get(player_id)
+            if timer:
+                timer.cancel()
+                timereadyall_cog.player_timers.pop(player_id, None)
+
+        if removed:
+            await interaction.response.send_message("You have been removed from all queues")
+        else:
+            await interaction.response.send_message("You were not in any queues")
 
 def setup(client):
-  client.add_cog(UnreadyAll(client))
+    client.add_cog(UnreadyAll(client))

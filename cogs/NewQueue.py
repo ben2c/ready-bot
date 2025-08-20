@@ -21,13 +21,13 @@ class NewQueue (commands.Cog):
         await interaction.response.send_message("This game already exist")
 
       else:
-        #Adds player to new queue
-        arrays.playerArr.append([player_id])
-        arrays.playerArrString.append([player_username])
+        # Create empty queue, do not add player
+        arrays.playerArr.append([])
+        arrays.playerArrString.append([])
         arrays.gameNameArr.append(queue_name)
         arrays.queueSize.append(queue_size)
       
-      await interaction.response.send_message("New queue for " + queue_name + " has been created and you have been added to the queue")
+      await interaction.response.send_message("New queue has been created for " + queue_name + " with a size of " + str(queue_size))
 
       if len(arrays.playerArr[len(arrays.playerArr) - 1]) == arrays.queueSize[len(arrays.playerArr) - 1]:
         await interaction.followup.send("Get your own ass online to play: "+ queue_name + "...you loner ... sad")
