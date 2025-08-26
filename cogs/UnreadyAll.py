@@ -87,7 +87,7 @@ class UnreadyAll(commands.Cog):
         if removed:
             await interaction.response.send_message("You have been removed from all queues")
         else:
-            await interaction.response.send_message("You were not in any queues")
+            await interaction.response.send_message("You're not in any queues", ephemeral=True)
 
 def setup(client):
     client.add_cog(UnreadyAll(client))
