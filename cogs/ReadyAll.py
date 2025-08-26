@@ -193,8 +193,13 @@ class JoinAllQueuesView(nextcord.ui.View):
                 removed = True
 
         # Cancel the user's timer if it exists
-        if player_id in self.cog.player_timers:
-            self.cog.player_timers[player_id].cancel()
+        timer = self.cog.player_timers.get(player_id)
+        if timer:
+            if isinstance(timer, dict):
+                for task in timer.values():
+                    task.cancel()
+            else:
+                timer.cancel()
             self.cog.player_timers.pop(player_id, None)
 
         if removed:
