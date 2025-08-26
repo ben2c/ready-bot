@@ -15,7 +15,7 @@ class MultiReady(commands.Cog):
     listOfTrolls = ["255976924428500993"]
 
     @nextcord.slash_command(
-        name='multir',
+        name='mr',
         description='Ready up for multiple specific queues for 1 hour',
         guild_ids=[testServerId]
     )
@@ -98,7 +98,7 @@ class MultiQueueSelectView(nextcord.ui.View):
 
         messages = []
         if queued_games:
-            messages.append(f"{player_username} queued for: {', '.join(queued_games)}")
+            messages.append(f"{player_username} queued for: {', '.join(queued_games)} for 1h")
         if already_queued:
             messages.append(f"Already queued for: {', '.join(already_queued)}")
         if full_queues:

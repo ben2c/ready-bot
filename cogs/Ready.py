@@ -27,7 +27,7 @@ class Ready(commands.Cog):
         try:
             queue_id = gameNameArrLower.index(queue.lower())
         except ValueError:
-            await interaction.response.send_message("Queue not found.", ephemeral=True)
+            await interaction.response.send_message("Queue not found", ephemeral=True)
             return
 
         clear_queue = False
@@ -56,7 +56,7 @@ class Ready(commands.Cog):
             # Checks if queue is full after player is added
             if len(arrays.playerArr[queue_id]) == arrays.queueSize[queue_id]:
                 await interaction.response.send_message(
-                    "Get your asses online to play: "+ arrays.gameNameArr[queue_id] + " | " + str(', '.join(arrays.playerArr[queue_id])),
+                    "Get online to play: "+ arrays.gameNameArr[queue_id] + " | " + str(', '.join(arrays.playerArr[queue_id])),
                     view=view
                 )
                 clear_queue = True
@@ -151,7 +151,7 @@ class JoinQueueView(nextcord.ui.View):
         # Check if queue is now full after joining
         if len(arrays.playerArr[self.queue_id]) == arrays.queueSize[self.queue_id]:
             await interaction.response.send_message(
-                f"Get your asses online to play: {arrays.gameNameArr[self.queue_id]} | {', '.join(arrays.playerArr[self.queue_id])}"
+                f"Get online to play: {arrays.gameNameArr[self.queue_id]} | {', '.join(arrays.playerArr[self.queue_id])}"
             )
             # Clear the queue after 200 seconds
             await asyncio.sleep(200)
@@ -166,7 +166,7 @@ class JoinQueueView(nextcord.ui.View):
                 await interaction.followup.send("Players in full queue were removed from all queues")
         else:
             await interaction.response.send_message(
-                player_username + f" has joined {arrays.gameNameArr[self.queue_id]}! Current queue: {', '.join(arrays.playerArrString[self.queue_id])}"
+                player_username + f" has joined {arrays.gameNameArr[self.queue_id]} for 1h | Current queue: {', '.join(arrays.playerArrString[self.queue_id])}"
             )
 
     @nextcord.ui.button(label="Remove From Queue", style=nextcord.ButtonStyle.danger)
@@ -182,11 +182,11 @@ class JoinQueueView(nextcord.ui.View):
                 self.cog.player_timers[player_id].cancel()
                 self.cog.player_timers.pop(player_id, None)
             await interaction.response.send_message(
-                player_username + f" has been removed from {arrays.gameNameArr[self.queue_id]}."
+                player_username + f" has been removed from {arrays.gameNameArr[self.queue_id]}"
             )
         else:
             await interaction.response.send_message(
-                "You are not in this queue.",
+                "You are not in this queue",
                 ephemeral=True
             )
 

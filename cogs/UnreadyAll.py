@@ -27,12 +27,25 @@ class UnreadyAll(commands.Cog):
                 arrays.playerArrString[queue_id].remove(player_username)
                 removed = True
 
+        # Cancel the user's timer in MultiReady cog if it exists
+        multiready_cog = self.client.get_cog("MultiReady")
+        if multiready_cog:
+            timers = multiready_cog.player_timers.get(player_id)
+            if timers:
+                for task in timers.values():
+                    task.cancel()
+                multiready_cog.player_timers.pop(player_id, None)
+
         # Cancel the user's timer in ReadyAll cog if it exists
         readyall_cog = self.client.get_cog("ReadyAll")
         if readyall_cog:
             timer = readyall_cog.player_timers.get(player_id)
             if timer:
-                timer.cancel()
+                if isinstance(timer, dict):
+                    for task in timer.values():
+                        task.cancel()
+                else:
+                    timer.cancel()
                 readyall_cog.player_timers.pop(player_id, None)
 
         # Cancel the user's timer in Ready cog if it exists
@@ -40,7 +53,11 @@ class UnreadyAll(commands.Cog):
         if ready_cog:
             timer = ready_cog.player_timers.get(player_id)
             if timer:
-                timer.cancel()
+                if isinstance(timer, dict):
+                    for task in timer.values():
+                        task.cancel()
+                else:
+                    timer.cancel()
                 ready_cog.player_timers.pop(player_id, None)
 
         # Cancel the user's timer in TimeReady cog if it exists
@@ -48,7 +65,11 @@ class UnreadyAll(commands.Cog):
         if timeready_cog:
             timer = timeready_cog.player_timers.get(player_id)
             if timer:
-                timer.cancel()
+                if isinstance(timer, dict):
+                    for task in timer.values():
+                        task.cancel()
+                else:
+                    timer.cancel()
                 timeready_cog.player_timers.pop(player_id, None)
 
         # Cancel the user's timer in TimeReadyAll cog if it exists
@@ -56,7 +77,11 @@ class UnreadyAll(commands.Cog):
         if timereadyall_cog:
             timer = timereadyall_cog.player_timers.get(player_id)
             if timer:
-                timer.cancel()
+                if isinstance(timer, dict):
+                    for task in timer.values():
+                        task.cancel()
+                else:
+                    timer.cancel()
                 timereadyall_cog.player_timers.pop(player_id, None)
 
         if removed:

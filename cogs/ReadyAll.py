@@ -3,6 +3,7 @@ from nextcord import Interaction, SlashOption
 from nextcord.ext import commands
 import arrays
 import asyncio
+from cogs.MultiReady import MultiQueueSelectView
 
 class ReadyAll(commands.Cog):
 
@@ -42,7 +43,7 @@ class ReadyAll(commands.Cog):
         ]
         if full_queues:
             await interaction.response.send_message(
-                f"The following queues are already full: {', '.join(full_queues)}.\nPlease use the /ready command for individual queues.",
+                f"The following queues are already full: {', '.join(full_queues)}.\nPlease use the /r command for individual queues",
                 ephemeral=True
             )
             return
@@ -62,7 +63,7 @@ class ReadyAll(commands.Cog):
                 arrays.playerArr[queue_id].append(player_id)
                 arrays.playerArrString[queue_id].append(player_username)
                 if len(arrays.playerArr[queue_id]) == arrays.queueSize[queue_id]:
-                    await interaction.followup.send("Get your asses online to play: " + arrays.gameNameArr[queue_id] + " | " + str(', '.join(arrays.playerArr[queue_id])))
+                    await interaction.followup.send("Get online to play: " + arrays.gameNameArr[queue_id] + " | " + str(', '.join(arrays.playerArr[queue_id])))
                     clear_queue = True
                     clear_queue_id = queue_id
 
@@ -130,7 +131,7 @@ class JoinAllQueuesView(nextcord.ui.View):
         ]
         if full_queues:
             await interaction.response.send_message(
-                f"The following queues are already full: {', '.join(full_queues)}.\nPlease use the /ready command for individual queues.",
+                f"The following queues are already full: {', '.join(full_queues)}.\nPlease use the /ready command for individual queues",
                 ephemeral=True
             )
             return
@@ -148,7 +149,7 @@ class JoinAllQueuesView(nextcord.ui.View):
                     clear_queue = True
                     clear_queue_id = queue_id
                     await interaction.response.send_message(
-                        f"Get your asses online to play: {arrays.gameNameArr[queue_id]} | {', '.join(arrays.playerArr[queue_id])}"
+                        f"Get online to play: {arrays.gameNameArr[queue_id]} | {', '.join(arrays.playerArr[queue_id])}"
                     )
 
         # Cancel any existing timer for this player
@@ -163,7 +164,7 @@ class JoinAllQueuesView(nextcord.ui.View):
         )
 
         if clear_queue == False:
-            await interaction.channel.send(player_username + " has joined all queues for 1h!")
+            await interaction.channel.send(player_username + " has joined all queues for 1h")
 
         # If any queue is full, clear it after 200 seconds
         if clear_queue and clear_queue_id is not None:
@@ -199,7 +200,17 @@ class JoinAllQueuesView(nextcord.ui.View):
         if removed:
             await interaction.response.send_message(player_username + " has been removed from all queues")
         else:
-            await interaction.response.send_message("You were not in any queues.", ephemeral=True)
+            await interaction.response.send_message("You were not in any queues", ephemeral=True)
+
+    @nextcord.ui.button(label="MultiReady", style=nextcord.ButtonStyle.success)
+    async def multiready_button(self, button: nextcord.ui.Button, interaction: Interaction):
+        # Show the MultiReady multi-select view
+        view = MultiQueueSelectView(self.cog)
+        await interaction.response.send_message(
+            "Select the queues you want to ready up for:",
+            view=view,
+            ephemeral=True
+        )
 
 def setup(client):
     client.add_cog(ReadyAll(client))

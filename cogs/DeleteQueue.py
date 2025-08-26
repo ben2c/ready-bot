@@ -44,7 +44,7 @@ class DeleteQueue(commands.Cog):
                         cog.player_timers.pop(player_id, None)
 
         await interaction.response.send_message(
-            f"Queue '{queue}' and all its players have been deleted."
+            f"Queue '{queue}' and all its players have been deleted"
         )
 
     # Autocomplete for queue names

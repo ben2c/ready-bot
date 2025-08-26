@@ -15,16 +15,24 @@ class Unready(commands.Cog):
         guild_ids=[testServerId]
     )
     async def unready(self, interaction: Interaction, queue: str = SlashOption(name="queue", description="Choose a queue")):
-        gameNameArrLower = [game.lower() for game in arrays.gameNameArr]
+        player_id = '<@' + f'{interaction.user.id}' + '>'
+        player_username = interaction.user.global_name
 
+        # Check if player is in 2 or more queues
+        queues_joined = sum(player_id in arr for arr in arrays.playerArr)
+        if queues_joined >= 2:
+            await interaction.response.send_message(
+                "You're in multiple queues! Use `/nrall` to unready from all queues. Use `/mr` to ready up for specific queues. Ty, too lazy to recode fix xd.",
+                ephemeral=True
+            )
+            return
+
+        gameNameArrLower = [game.lower() for game in arrays.gameNameArr]
         try:
             queue_id = gameNameArrLower.index(queue.lower())
         except ValueError:
             await interaction.response.send_message("Queue not found.", ephemeral=True)
             return
-
-        player_id = '<@' + f'{interaction.user.id}' + '>'
-        player_username = interaction.user.global_name
 
         if player_id in arrays.playerArr[queue_id]:
             arrays.playerArr[queue_id].remove(player_id)
