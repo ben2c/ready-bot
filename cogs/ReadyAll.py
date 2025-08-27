@@ -154,14 +154,13 @@ class JoinAllQueuesView(nextcord.ui.View):
 
         # Cancel any existing timer for this player
         if player_id in self.cog.player_timers:
-            self.cog.player_timers[player_id].cancel()
-
-        # Start timeout task for this player
-        timeout = self.cog.TROLL_TIMEOUT_SECONDS if interaction.user.id in self.cog.listOfTrolls else self.cog.DEFAULT_TIMEOUT_SECONDS
-        channel = interaction.channel
-        self.cog.player_timers[player_id] = asyncio.create_task(
-            self.cog._timeout_player(player_id, player_username, timeout, channel)
-        )
+            timer = self.cog.player_timers[player_id]
+            if isinstance(timer, dict):
+                for task in timer.values():
+                    task.cancel()
+            else:
+                timer.cancel()
+            self.cog.player_timers.pop(player_id, None)
 
         if clear_queue == False:
             await interaction.channel.send(player_username + " has joined all queues for 1h")
@@ -177,7 +176,8 @@ class JoinAllQueuesView(nextcord.ui.View):
                             index_player = arrays.playerArr[index_game].index(player)
                             arrays.playerArr[index_game].remove(player)
                             arrays.playerArrString[index_game].pop(index_player)
-                await channel.send("Players in full queue were removed from all queues")
+                # FIX: Use followup.send instead of response.send_message
+                await interaction.followup.send("Players in full queue were removed from all queues")
 
     @nextcord.ui.button(label="Remove From All Queues", style=nextcord.ButtonStyle.danger)
     async def not_ready(self, button: nextcord.ui.Button, interaction: Interaction):
