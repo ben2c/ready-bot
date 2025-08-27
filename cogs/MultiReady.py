@@ -46,14 +46,13 @@ class MultiQueueSelectView(nextcord.ui.View):
                 for idx, game in enumerate(arrays.gameNameArr)
             ]
         )
-        select.callback = self.select_queues_callback  # <-- Use new callback
+        select.callback = lambda interaction: self.select_queues_callback(select, interaction)
         self.add_item(select)
 
-    async def select_queues_callback(self, interaction: Interaction):
-        select = interaction.data  # Get the select data from interaction
+    async def select_queues_callback(self, select: nextcord.ui.Select, interaction: Interaction):
         player_id = '<@' + f'{interaction.user.id}' + '>'
         player_username = interaction.user.global_name
-        selected_indices = [int(v) for v in interaction.data['values']]
+        selected_indices = [int(v) for v in select.values]
         queued_games = []
         already_queued = []
         full_queues = []
