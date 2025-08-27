@@ -153,8 +153,8 @@ class JoinAllQueuesView(nextcord.ui.View):
                     )
 
         # Cancel any existing timer for this player
-        if player_id in self.cog.player_timers:
-            timer = self.cog.player_timers[player_id]
+        timer = self.cog.player_timers.get(player_id)
+        if timer:
             if isinstance(timer, dict):
                 for task in timer.values():
                     task.cancel()
@@ -162,12 +162,18 @@ class JoinAllQueuesView(nextcord.ui.View):
                 timer.cancel()
             self.cog.player_timers.pop(player_id, None)
 
+        # Start timeout task for this player
+        timeout = self.cog.TROLL_TIMEOUT_SECONDS if interaction.user.id in self.cog.listOfTrolls else self.cog.DEFAULT_TIMEOUT_SECONDS
+        self.cog.player_timers[player_id] = asyncio.create_task(
+            self._timeout_all_queues(player_id, player_username, timeout, interaction.channel)
+        )
+
         if clear_queue == False:
             await interaction.channel.send(player_username + " has joined all queues for 1h")
 
         # If any queue is full, clear it after 200 seconds
         if clear_queue and clear_queue_id is not None:
-            await asyncio.sleep(200)
+            await asyncio.sleep(10)
             if len(arrays.playerArr[clear_queue_id]) == arrays.queueSize[clear_queue_id]:
                 tempPlayerArray = arrays.playerArr[clear_queue_id].copy()
                 for player in reversed(tempPlayerArray):
@@ -178,6 +184,22 @@ class JoinAllQueuesView(nextcord.ui.View):
                             arrays.playerArrString[index_game].pop(index_player)
                 # FIX: Use followup.send instead of response.send_message
                 await interaction.followup.send("Players in full queue were removed from all queues")
+
+    async def _timeout_all_queues(self, player_id, player_username, timeout, channel):
+        try:
+            await asyncio.sleep(timeout)
+            timed_out_queues = []
+            for queue_id in range(len(arrays.gameNameArr)):
+                if player_id in arrays.playerArr[queue_id]:
+                    arrays.playerArr[queue_id].remove(player_id)
+                    arrays.playerArrString[queue_id].remove(player_username)
+                    timed_out_queues.append(arrays.gameNameArr[queue_id])
+            if timed_out_queues:
+                await channel.send(f"{player_username} timed out from: {', '.join(timed_out_queues)}")
+        except asyncio.CancelledError:
+            pass
+        finally:
+            self.cog.player_timers.pop(player_id, None)
 
     @nextcord.ui.button(label="Remove From All Queues", style=nextcord.ButtonStyle.danger)
     async def not_ready(self, button: nextcord.ui.Button, interaction: Interaction):
