@@ -70,7 +70,7 @@ class TimeReady(commands.Cog):
             return
 
         if clear_queue:
-            await asyncio.sleep(200)  # Wait 3 minutes before checking if the queue is still full
+            await asyncio.sleep(30)  # Wait 30 seconds before checking if the queue is still full
             if len(arrays.playerArr[clear_queue_id]) == arrays.queueSize[clear_queue_id]:
                 tempPlayerArray = arrays.playerArr[clear_queue_id]
                 for player in reversed(tempPlayerArray):

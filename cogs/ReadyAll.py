@@ -68,7 +68,7 @@ class ReadyAll(commands.Cog):
                     clear_queue_id = queue_id
 
         if clear_queue:
-            await asyncio.sleep(200)
+            await asyncio.sleep(30)
             if len(arrays.playerArr[clear_queue_id]) == arrays.queueSize[clear_queue_id]:
                 tempPlayerArray = arrays.playerArr[clear_queue_id]
                 for player in reversed(tempPlayerArray):
@@ -171,9 +171,9 @@ class JoinAllQueuesView(nextcord.ui.View):
         if clear_queue == False:
             await interaction.channel.send(player_username + " has joined all queues for 1h")
 
-        # If any queue is full, clear it after 200 seconds
+        # If any queue is full, clear it after 30 seconds
         if clear_queue and clear_queue_id is not None:
-            await asyncio.sleep(10)
+            await asyncio.sleep(30)
             if len(arrays.playerArr[clear_queue_id]) == arrays.queueSize[clear_queue_id]:
                 tempPlayerArray = arrays.playerArr[clear_queue_id].copy()
                 for player in reversed(tempPlayerArray):
