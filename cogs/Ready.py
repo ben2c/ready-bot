@@ -70,9 +70,9 @@ class Ready(commands.Cog):
             await interaction.response.send_message("Final catch, idk what you entered.", ephemeral=True)
             return
 
-        # Wait 3 minutes before checking if the queue is still full
+        # Wait 30 seconds before checking if the queue is still full
         if clear_queue:
-            await asyncio.sleep(200)  
+            await asyncio.sleep(30)  
             if len(arrays.playerArr[clear_queue_id]) == arrays.queueSize[clear_queue_id]:
                 tempPlayerArray = arrays.playerArr[clear_queue_id]
                 for player in reversed(tempPlayerArray):
@@ -153,8 +153,8 @@ class JoinQueueView(nextcord.ui.View):
             await interaction.response.send_message(
                 f"Get online to play: {arrays.gameNameArr[self.queue_id]} | {', '.join(arrays.playerArr[self.queue_id])}"
             )
-            # Clear the queue after 200 seconds
-            await asyncio.sleep(200)
+            # Clear the queue after 30 seconds
+            await asyncio.sleep(30)
             if len(arrays.playerArr[self.queue_id]) == arrays.queueSize[self.queue_id]:
                 tempPlayerArray = arrays.playerArr[self.queue_id].copy()
                 for player in reversed(tempPlayerArray):

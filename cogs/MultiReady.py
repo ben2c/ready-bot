@@ -123,7 +123,7 @@ class MultiQueueSelectView(nextcord.ui.View):
                         self.timed_out_queues.pop(player_id)
 
     async def _clear_full_queue(self, queue_id, channel):
-        await asyncio.sleep(200)
+        await asyncio.sleep(30)
         if len(arrays.playerArr[queue_id]) == arrays.queueSize[queue_id]:
             tempPlayerArray = arrays.playerArr[queue_id].copy()
             for player in reversed(tempPlayerArray):
