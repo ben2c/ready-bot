@@ -42,8 +42,7 @@ class ReadyAll(commands.Cog):
             if len(arrays.playerArr[queue_id]) == arrays.queueSize[queue_id]
         ]
         if full_queues:
-            await interaction.response.defer()
-            await interaction.followup.send(
+            await interaction.response.send_message(
                 f"The following queues are already full: {', '.join(full_queues)}.\nPlease use the /r command for individual queues",
                 ephemeral=True
             )
@@ -52,8 +51,7 @@ class ReadyAll(commands.Cog):
         # Button view for joining all queues
         view = JoinAllQueuesView(self)
 
-        await interaction.response.defer()
-        await interaction.followup.send(
+        await interaction.response.send_message(
             "Added to all queues for 1h",
             view=view
         )
@@ -65,7 +63,6 @@ class ReadyAll(commands.Cog):
                 arrays.playerArr[queue_id].append(player_id)
                 arrays.playerArrString[queue_id].append(player_username)
                 if len(arrays.playerArr[queue_id]) == arrays.queueSize[queue_id]:
-                    await interaction.response.defer()
                     await interaction.followup.send("Get online to play: " + arrays.gameNameArr[queue_id] + " | " + str(', '.join(arrays.playerArr[queue_id])))
                     clear_queue = True
                     clear_queue_id = queue_id
@@ -73,14 +70,13 @@ class ReadyAll(commands.Cog):
         if clear_queue:
             await asyncio.sleep(30)
             if len(arrays.playerArr[clear_queue_id]) == arrays.queueSize[clear_queue_id]:
-                tempPlayerArray = arrays.playerArr[clear_queue_id]
+                tempPlayerArray = arrays.playerArr[clear_queue_id][:]
                 for player in reversed(tempPlayerArray):
                     for index_game in range(len(arrays.gameNameArr)):
                         if player in arrays.playerArr[index_game]:
                             index_player = arrays.playerArr[index_game].index(player)
                             arrays.playerArr[index_game].remove(player)
                             arrays.playerArrString[index_game].pop(index_player)
-                await interaction.response.defer()
                 await interaction.followup.send("Players in full queue were removed from all queues")
 
         # Cancel any existing timer for this player
@@ -124,8 +120,7 @@ class JoinAllQueuesView(nextcord.ui.View):
             for queue_id in range(len(arrays.gameNameArr))
         )
         if in_all_queues:
-            await interaction.response.defer()
-            await interaction.followup.send("You are already in all queues!", ephemeral=True)
+            await interaction.response.send_message("You are already in all queues!", ephemeral=True)
             return
 
         # Check if any queue is full
@@ -135,8 +130,7 @@ class JoinAllQueuesView(nextcord.ui.View):
             if len(arrays.playerArr[queue_id]) == arrays.queueSize[queue_id]
         ]
         if full_queues:
-            await interaction.response.defer()
-            await interaction.followup.send(
+            await interaction.response.send_message(
                 f"The following queues are already full: {', '.join(full_queues)}.\nPlease use the /ready command for individual queues",
                 ephemeral=True
             )
@@ -145,8 +139,8 @@ class JoinAllQueuesView(nextcord.ui.View):
         clear_queue = False
         clear_queue_id = None
 
-        for queue in arrays.gameNameArr:
-            queue_id = arrays.gameNameArr.index(queue)
+        # Add player to all queues
+        for queue_id, queue in enumerate(arrays.gameNameArr):
             if player_id not in arrays.playerArr[queue_id]:
                 arrays.playerArr[queue_id].append(player_id)
                 arrays.playerArrString[queue_id].append(player_username)
@@ -154,8 +148,7 @@ class JoinAllQueuesView(nextcord.ui.View):
                 if len(arrays.playerArr[queue_id]) == arrays.queueSize[queue_id]:
                     clear_queue = True
                     clear_queue_id = queue_id
-                    await interaction.response.defer()
-                    await interaction.followup.send(
+                    await interaction.channel.send(
                         f"Get online to play: {arrays.gameNameArr[queue_id]} | {', '.join(arrays.playerArr[queue_id])}"
                     )
 
@@ -175,22 +168,20 @@ class JoinAllQueuesView(nextcord.ui.View):
             self._timeout_all_queues(player_id, player_username, timeout, interaction.channel)
         )
 
-        if clear_queue == False:
-            await interaction.response.defer()
-            await interaction.followup.send(player_username + " has joined all queues for 1h")
+        # Respond to the interaction ONCE
+        await interaction.response.send_message(player_username + " has joined all queues for 1h")
 
         # If any queue is full, clear it after 30 seconds
         if clear_queue and clear_queue_id is not None:
             await asyncio.sleep(30)
             if len(arrays.playerArr[clear_queue_id]) == arrays.queueSize[clear_queue_id]:
-                tempPlayerArray = arrays.playerArr[clear_queue_id].copy()
+                tempPlayerArray = arrays.playerArr[clear_queue_id][:]
                 for player in reversed(tempPlayerArray):
                     for index_game in range(len(arrays.gameNameArr)):
                         if player in arrays.playerArr[index_game]:
                             index_player = arrays.playerArr[index_game].index(player)
                             arrays.playerArr[index_game].remove(player)
                             arrays.playerArrString[index_game].pop(index_player)
-                await interaction.response.defer()
                 await interaction.followup.send("Players in full queue were removed from all queues")
 
     async def _timeout_all_queues(self, player_id, player_username, timeout, channel):
